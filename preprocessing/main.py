@@ -13,7 +13,7 @@ cv2.namedWindow( "settings" ) # создаем окно настроек
 
 # image_file = "51-page-8.png"
 image_file = "20210812135619453-page-2.png"
-image_folder = "content2\images"
+image_folder = "preprocessing"
 
 file = os.path.join(os.getcwd(), image_folder, image_file)
 
@@ -23,14 +23,24 @@ if not os.path.isfile(file):
 img = cv2.imread(file)
 
 # создаем 6 бегунков для настройки начального и конечного цвета фильтра
-cv2.createTrackbar('h1', 'settings', 90, 255, nothing)
-cv2.createTrackbar('s1', 'settings', 15, 255, nothing)
-cv2.createTrackbar('v1', 'settings', 85, 255, nothing)
+# # Variant 1
+# cv2.createTrackbar('h1', 'settings', 90, 255, nothing)
+# cv2.createTrackbar('s1', 'settings', 15, 255, nothing)
+# cv2.createTrackbar('v1', 'settings', 85, 255, nothing)
+# cv2.createTrackbar('h2', 'settings', 255, 255, nothing)
+# cv2.createTrackbar('s2', 'settings', 255, 255, nothing)
+# cv2.createTrackbar('v2', 'settings', 255, 255, nothing)
+# cv2.createTrackbar('brightness', 'settings', 5, 255, nothing)
+# cv2.createTrackbar('contrast', 'settings', 255, 255, nothing)
+# Variant 2
+cv2.createTrackbar('h1', 'settings', 0, 255, nothing)
+cv2.createTrackbar('s1', 'settings', 40, 255, nothing)
+cv2.createTrackbar('v1', 'settings', 70, 255, nothing)
 cv2.createTrackbar('h2', 'settings', 255, 255, nothing)
 cv2.createTrackbar('s2', 'settings', 255, 255, nothing)
 cv2.createTrackbar('v2', 'settings', 255, 255, nothing)
-cv2.createTrackbar('brightness', 'settings', 5, 255, nothing)
-cv2.createTrackbar('contrast', 'settings', 255, 255, nothing)
+cv2.createTrackbar('brightness', 'settings', 65, 255, nothing)
+cv2.createTrackbar('contrast', 'settings', 170, 255, nothing)
 
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY )
 
@@ -59,7 +69,8 @@ while True:
 
     negative = cv2.bitwise_not(subtracted)
 
-    adjusted = apply_brightness_contrast(negative, brightness, contrast)
+    adjusted = negative
+    # adjusted = apply_brightness_contrast(negative, brightness, contrast)
 
     cv2.imshow('result', np.hstack([filtered, subtracted, negative, adjusted]))
  

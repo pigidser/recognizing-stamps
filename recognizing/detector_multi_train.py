@@ -7,12 +7,13 @@ import sys
 import  time
 import numpy as np
 import matplotlib.pyplot as plt
-import pyautogui as pyg
 import shutil
 
 from detector_multi_utils import *
 
-detector_directory = "./content2/"
+exp_num = 0
+
+detector_directory = "./content234/"
 img_directory = detector_directory + "images"
 box_directory = detector_directory + "labels"
 
@@ -31,6 +32,7 @@ data = get_data(box_directory, use_difficult)
 print(f"Total labeled files: {len(data)}")
 
 label_names = get_labels(data)
+label_names = [x for x in label_names if x not in ['nakl-otpusk', 'transp-nakl']]
 print(f"Found unique labels:")
 print(label_names)
 
@@ -69,9 +71,9 @@ for label in label_names:
 
     # options.detection_window_size = 6400 # default
     if label == 'mars-stamp':
-        options.detection_window_size = 10000
+        options.detection_window_size = 14400
     else:
-        options.detection_window_size = 6400
+        options.detection_window_size = 10000
 
     # Disabling the horizontal flipping. 
     options.add_left_right_image_flips = False
@@ -99,7 +101,7 @@ for label in label_names:
     print('Training Completed, Total Time taken: {:.2f} seconds'.format(time.time() - st))
 
     ### Save the trained detector
-    detector_filename = os.path.join(os.getcwd(), detector_directory, detector_name + '_d_' + str(use_difficult) + '.svm')
+    detector_filename = os.path.join(os.getcwd(), detector_directory, detector_name + '_d_' + str(use_difficult) + '_exp' + str(exp_num) + '.svm')
     if os.path.isfile(detector_filename):
         os.remove(detector_filename)
     detector.save(detector_filename)

@@ -7,9 +7,9 @@ import xml.etree.ElementTree as ET
 
 def get_img_boxes(box_file_name, use_difficult):
     """
-    Get image file name and all boxes for one box file
-    """
+    Get image file name and all boxes for one box file.
 
+    """
     data = dict()
     d = dict()
     tree = ET.parse(box_file_name)    
@@ -46,7 +46,8 @@ def get_img_boxes(box_file_name, use_difficult):
 
 def get_data(box_directory, use_difficult):
     """
-    Get data structure (image file name and boxes information) for all box files in a directory 
+    Get data structure (image file name and boxes information) for all box files in a directory.
+
     """
     data = list()
     for box_name in os.listdir(box_directory):
@@ -56,7 +57,8 @@ def get_data(box_directory, use_difficult):
 
 def get_labels(data):
     """
-    Get all unique labels that are presented in data structure
+    Get all unique labels that are presented in data structure.
+
     """
     labels = list()
     for box_info in data:
@@ -70,9 +72,9 @@ def get_labels(data):
 
 def get_data_label(img_directory, data, label):
     """
-    Get data structure for selected label that is used by particular detector
-    """
+    Get data structure for selected label that is used by particular detector.
 
+    """
     data_label = dict()
     i = 0
     for box_info in data:
@@ -139,19 +141,20 @@ def apply_transform(img):
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY )
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV )
 
-    # формируем начальный и конечный цвет фильтра, яркость и контрастность
-    h_min = np.array((0, 40, 70), np.uint8)
+    # Form the initial and final filter color, brightness and contrast.
+    # Variant 1
+    h_min = np.array((90, 15, 85), np.uint8)
     h_max = np.array((255, 255, 255), np.uint8)
-    brightness, contrast = 65 - 127, 170 - 127
+    brightness, contrast = 5 - 127, 255 - 127
+    # # Variant 2
+    # h_min = np.array((0, 40, 70), np.uint8)
+    # h_max = np.array((255, 255, 255), np.uint8)
+    # brightness, contrast = 65 - 127, 170 - 127
 
-    # накладываем фильтр на кадр в модели HSV
+    # CV transformations
     filtered = cv2.inRange(hsv, h_min, h_max)
-
     subtracted = cv2.subtract(filtered, gray)
-
     negative = cv2.bitwise_not(subtracted)
-
-    # res = negative
     res = apply_brightness_contrast(negative, brightness, contrast)
 
     return res

@@ -38,11 +38,8 @@ def apply_transform(img):
 
     # накладываем фильтр на кадр в модели HSV
     filtered = cv2.inRange(hsv, h_min, h_max)
-
     subtracted = cv2.subtract(filtered, gray)
     negative = cv2.bitwise_not(subtracted)
-
-    # res = negative
     res = apply_brightness_contrast(negative, brightness, contrast)
 
     return res
